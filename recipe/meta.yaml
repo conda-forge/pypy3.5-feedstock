@@ -1,5 +1,5 @@
 {% set name = "pypy3.5" %}
-{% set version = "5.10.1" %}
+{% set version = "6.0.0" %}
 
 package:
   name: {{ name }}
@@ -8,14 +8,14 @@ package:
 source:
   - url: https://bitbucket.org/pypy/pypy/downloads/pypy3-v{{ version }}-src.tar.bz2
     fn: pypy3-v{{ version }}-src.tar.bz2
-    sha256: f5548e06e2fc0c24ec8b6e3c5b09f90081818f7caa3e436dc312592611724713
+    sha256: ed8005202b46d6fc6831df1d13a4613bc40084bfa42f275068edadf8954034a3
     folder: pypy3
     patches:
       - tklib_build.patch
 
-  - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.9.0-osx64.tar.bz2  # [osx]
-    fn: pypy2-v5.9.0-osx64.tar.bz2  # [osx]
-    sha256: 94de50ed80c7f6392ed356c03fd54cdc84858df43ad21e9e971d1b6da0f6b867  # [osx]
+  - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v6.0.0-osx64.tar.bz2  # [osx]
+    fn: ppypy2-v6.0.0-osx64.tar.bz2  # [osx]
+    sha256: d7dc443e6bb9a45212e8d8f5a63e9f6ce23f1d88c50709efea1c75b76c8bc186  # [osx]
     folder: pypy2-osx  # [osx]
 
 build:
