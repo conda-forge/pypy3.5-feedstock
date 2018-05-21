@@ -14,7 +14,7 @@ source:
       - tklib_build.patch
 
   - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v6.0.0-osx64.tar.bz2  # [osx]
-    fn: ppypy2-v6.0.0-osx64.tar.bz2  # [osx]
+    fn: pypy2-v6.0.0-osx64.tar.bz2  # [osx]
     sha256: d7dc443e6bb9a45212e8d8f5a63e9f6ce23f1d88c50709efea1c75b76c8bc186  # [osx]
     folder: pypy2-osx  # [osx]
 
