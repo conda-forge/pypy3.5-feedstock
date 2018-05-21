@@ -1,0 +1,11 @@
+--- pypy3/pypy/goal/targetpypystandalone.py	2018-04-24 08:05:26.000000000 +0200
++++ pypy3/pypy/goal/targetpypystandalone_translate_only.py	2018-05-21 22:03:38.000000000 +0200
+@@ -348,7 +348,7 @@
+         pypy.module.sys.Module.interpleveldefs['pypy_translation_info'] = wrapstr
+         if config.objspace.usemodules._cffi_backend:
+             self.hack_for_cffi_modules(driver)
+-
++        driver.backend_select_goals([os.environ.get('PYPY_CUSTOM_GOAL', 'compile')])
+         return self.get_entry_point(config)
+ 
+     def hack_for_cffi_modules(self, driver):

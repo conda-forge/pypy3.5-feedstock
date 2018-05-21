@@ -53,7 +53,18 @@ install:
       conda install --yes --quiet conda-forge-ci-setup=1
       source run_conda_forge_build_setup
 
-script:
-  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
+jobs:
+  include:
+      # Create the translated db takes about 30 mins, which is just below Travis' timeout.
+      - stage: translate-and-create-database
+        env:
+          - PYPY_CUSTOM_GOAL=database
+        script:
+          - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml || true
 
-  - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
+      # The build will resume from the last checkpoint.
+      - stage: compile-and-upload
+        script:
+          - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
+
+          - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
