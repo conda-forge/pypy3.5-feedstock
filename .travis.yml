@@ -53,7 +53,17 @@ install:
       conda install --yes --quiet conda-forge-ci-setup=1
       source run_conda_forge_build_setup
 
-script:
-  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
 
-  - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
+cache: bundler
+
+jobs:
+  include:
+    - stage: prepare cache
+      script:
+        - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --check
+
+    - stage: build
+      script:
+        - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
+
+        - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
