@@ -5,7 +5,7 @@
          if config.objspace.usemodules._cffi_backend:
              self.hack_for_cffi_modules(driver)
 -
-+        driver.backend_select_goals([os.environ.get('PYPY_CUSTOM_GOAL', 'compile')])
++        driver.default_goal = os.environ.get('PYPY_CUSTOM_GOAL', driver.default_goal)
          return self.get_entry_point(config)
  
      def hack_for_cffi_modules(self, driver):
