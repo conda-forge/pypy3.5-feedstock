@@ -37,11 +37,15 @@ ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
 cd $GOAL_DIR
 
-if [ -d $RECIPE_DIR/pypy3_prebuild ]; then
+if [ -d $RECIPE_DIR/pypy3_prebuilt ]; then
     # Pre-built PyPy.
-    # TODO: Implement.
-    cp $RECIPE_DIR/${PKG_NAME}-c ./${PKG_NAME}-c
-    cp $RECIPE_DIR/libpypy3-c.dylib ./libpypy3-c.dylib
+    cp $RECIPE_DIR/pypy3_prebuilt/${PKG_NAME}-c ./${PKG_NAME}-c
+    cp $RECIPE_DIR/pypy3_prebuilt/libpypy3-c.dylib ./libpypy3-c.dylib
+
+    # Manually copy all the includes.
+    cp $RECIPE_DIR/pypy3_prebuilt/*\.h ../../include/
+    cp ../../pypy/module/cpyext/include/* ../../include/
+    cp ../../pypy/module/cpyext/parse/* ../../include/
 else
     # Build PyPy.
     ${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py

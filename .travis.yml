@@ -73,8 +73,9 @@ jobs:
 
       - stage: compile-and-upload
         script:
-          - cd $PYPY_USESSION_DIR/testing_1 && make -j 2
-          - cp -R $PYPY_USESSION_DIR/pypy3_prebuild ./recipe
+          - (cd $PYPY_USESSION_DIR/testing_1 && make -j 2)
+          - cp $PYPY_USESSION_DIR/testing_1/libpypy3-c.dylib $PYPY_USESSION_DIR/testing_1/pypy3-c ./recipe/pypy3_prebuilt
+          - cp $PYPY_USESSION_DIR/pypy_decl.h $PYPY_USESSION_DIR/pypy_macros.h $PYPY_USESSION_DIR/pypy_structmember_decl.h ./recipe/pypy3_prebuilt
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id
 
           - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
