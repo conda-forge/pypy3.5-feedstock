@@ -1,3 +1,5 @@
 *.pyc
 
 build_artifacts
+libpypy3-c.dylib
+pypy3-c

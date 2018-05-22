@@ -22,7 +22,7 @@ source:
 
 build:
   number: 0
-  skip: True  # [win, linux]
+  skip: True  # [not osx]
   skip_compile_pyc:
     - lib*
 
