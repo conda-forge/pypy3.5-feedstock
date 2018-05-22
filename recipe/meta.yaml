@@ -25,6 +25,9 @@ build:
   skip: True  # [not osx]
   skip_compile_pyc:
     - lib*
+  script_env:
+   - PYPY_CUSTOM_GOAL  # [osx]
+   - PYPY_USESSION_DIR  # [osx]
 
 requirements:
   build:

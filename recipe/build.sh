@@ -17,6 +17,8 @@ if [ $(uname) == Darwin ]; then
     cp ${PREFIX}/lib/libffi.6.dylib.bak ${PREFIX}/lib/libffi.6.dylib
 
     install_name_tool -id ${PREFIX}/lib/libffi.6.dylib ${PREFIX}/lib/libffi.6.dylib
+
+    ln -s ${PREFIX}/lib/libtinfo.6.dylib ${PREFIX}/lib/libtinfo.5.dylib
 fi
 
 if [ $(uname) == Linux ]; then
@@ -33,12 +35,15 @@ BUILD_DIR=${PREFIX}/../build
 TARGET_DIR=${PREFIX}/../target
 ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
-# Build PyPy.
-if [ $PYPY_PREBUILT == 1 ]; then
-    cp $SRC_DIR/${PKG_NAME}-c ./${PKG_NAME}-c
-    cp $SRC_DIR/libpypy3-c.dylib ./libpypy3-c.dylib
+cd $GOAL_DIR
+
+if [ -d $RECIPE_DIR/pypy3_prebuild ]; then
+    # Pre-built PyPy.
+    # TODO: Implement.
+    cp $RECIPE_DIR/${PKG_NAME}-c ./${PKG_NAME}-c
+    cp $RECIPE_DIR/libpypy3-c.dylib ./libpypy3-c.dylib
 else
-    cd $GOAL_DIR
+    # Build PyPy.
     ${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
 fi
 

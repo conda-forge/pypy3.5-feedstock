@@ -8,7 +8,7 @@
 +
          try:
 -            drv.proceed(goals)
-+            # import pdb;pdb.set_trace()
++            log('Goals: %r' % (custom_goal if custom_goal else goals))
 +            if custom_goal:
 +                drv.proceed([custom_goal])
 +            else:
