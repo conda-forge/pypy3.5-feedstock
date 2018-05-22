@@ -60,7 +60,7 @@ jobs:
   include:
     - stage: prepare cache
       script:
-        - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --check
+        - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --source
 
     - stage: build
       script:
