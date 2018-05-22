@@ -34,8 +34,13 @@ TARGET_DIR=${PREFIX}/../target
 ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
 # Build PyPy.
-cd $GOAL_DIR
-${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
+if [ $(PYPY_PREBUILT) == 1 ]; then
+    cp $SRC_DIR/${PKG_NAME}-c ./${PKG_NAME}-c
+    cp $SRC_DIR/libpypy3-c.dylib ./libpypy3-c.dylib
+else
+    cd $GOAL_DIR
+    ${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
+fi
 
 if [ $(uname) == Darwin ]; then
     # Temporally set the @rpath of the generated PyPy binary to ${PREFIX}.

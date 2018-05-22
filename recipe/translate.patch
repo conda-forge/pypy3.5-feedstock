@@ -4,13 +4,13 @@
              except EnvironmentError:
                  pass
  
-+        custom_tasks = os.environ.get('PYPY_CUSTOM_TASKS')
++        custom_goal = os.environ.get('PYPY_CUSTOM_GOAL')
 +
          try:
 -            drv.proceed(goals)
 +            # import pdb;pdb.set_trace()
-+            if custom_tasks:
-+                [drv.tasks[task][0]() for task in custom_tasks.split(',')]
++            if custom_goal:
++                drv.proceed([custom_goal])
 +            else:
 +                drv.proceed(goals)
          finally:

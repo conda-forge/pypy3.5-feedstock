@@ -64,20 +64,19 @@ install:
 
 jobs:
   include:
-      # All tasks: ['annotate', 'rtype_lltype', 'pyjitpl_lltype', 'backendopt_lltype', 'stackcheckinsertion_lltype', 'database_c', 'source_c', 'compile_c', 'build_cffi_imports']
-
-      # Create the translated db takes about 30 mins, which is just below Travis' timeout.
+      # Create the c source files takes about 45 mins, which is just below Travis' timeout.
       - stage: translate-and-create-database
         env:
-          - PYPY_CUSTOM_TASKS=annotate,rtype_lltype,pyjitpl_lltype,backendopt_lltype,stackcheckinsertion_lltype,database_c
+          - PYPY_CUSTOM_GOAL=source
         script:
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml || true
 
-      # The build will resume from the last checkpoint.
       - stage: compile-and-upload
         env:
-          - PYPY_CUSTOM_TASKS=source_c,compile_c,build_cffi_imports
+          - PYPY_PREBUILT=1
         script:
+          - cd $PYPY_USESSION_DIR/testing_1 && make -j 2
+          - cp $PYPY_USESSION_DIR/libpypy3-c.dylib $PYPY_USESSION_DIR/pypy3-c ./recipe
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
 
           - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
