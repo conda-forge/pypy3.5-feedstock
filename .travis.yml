@@ -14,6 +14,10 @@ env:
     # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
     - secure: "a5K0kmRaXI55IBHFhNe+Q07BzkWJwqe7dy8COb5T0LFnVGMLPP7s+YXb+szVv+Vsz8qr17GpjucGK/AiPxuWCfCcY0fiCGSyNx8XTrt5Rpc0xNFefY6Q2DC9k32xCbdYQkngg0LBlFdS8sckf+730F/u9ySea/0bHNM0nWfUQXq4enAjX+ayS6dhv6Tr4a3buy37M9Ha8FCY8enB/wubdVPJVn3JxjNcZxr6MtEyzPOPMOZ70LaNzX2yWUz44xKyXqan/i6bmh4j9XlerszJJ9Gd46RKTquikJgpDi4QNrpMT81Le2GTAhaATCC5A9sWXvh5kHDXohCNfv9vLVcrpfLOpqoMWyRrhTMWCGN5f6l+xP5RjQV/ekbvlKQeM5EDo5jawffcHA9eL2ISqBZWLbbEUMp9q7Ks0DMTiWBgiAXNBLBo55skEF3Utmw5PysAjySH5x8/EUvzFwbr19SJi3X40Nfw3ES8kn8sBqRCgH1prMAnoYO3/+EVO1MN8hXwgnTGZ8k0Hj8q4VPCDXGuGtW8yTORsQ05NgyqXKl8pYwLrN1wrHW4clKa40kQ92kL3yRI4w0+nkThtyBDXVx3SccMvp1V+YCwbOKqPBxI9OT7qwQ5lDOTtEt5I850tgEhqsu63MbmwP3WXhRzVPQR6pyGEf/S4/ZakGCCFx3AmQA="
 
+    # include $HOME/.local/bin for `aws`
+    - PATH=$HOME/.local/bin:$PATH
+
+    - PYPY_USESSION_DIR=~/$TRAVIS_BUILD_NUMBER/pypy3.5-usession
 
 before_install:
     # Fast finish the PR.
@@ -29,6 +33,11 @@ before_install:
       chmod +x ~/uninstall_homebrew
       ~/uninstall_homebrew -fq
       rm ~/uninstall_homebrew
+
+  # set up awscli packages
+  - pip install --user awscli
+  - mkdir -p ~/$TRAVIS_BUILD_NUMBER
+  - aws s3 sync s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER ~/$TRAVIS_BUILD_NUMBER
 
 
 install:
@@ -55,16 +64,26 @@ install:
 
 jobs:
   include:
+      # All tasks: ['annotate', 'rtype_lltype', 'pyjitpl_lltype', 'backendopt_lltype', 'stackcheckinsertion_lltype', 'database_c', 'source_c', 'compile_c', 'build_cffi_imports']
+
       # Create the translated db takes about 30 mins, which is just below Travis' timeout.
       - stage: translate-and-create-database
         env:
-          - PYPY_CUSTOM_GOAL=database
+          - PYPY_CUSTOM_TASKS=annotate,rtype_lltype,pyjitpl_lltype,backendopt_lltype,stackcheckinsertion_lltype,database_c
         script:
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml || true
 
       # The build will resume from the last checkpoint.
       - stage: compile-and-upload
+        env:
+          - PYPY_CUSTOM_TASKS=source_c,compile_c,build_cffi_imports
         script:
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
 
           - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
+
+      after_success:
+        - aws s3 rm --recursive s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER # clean up after ourselves
+
+after_success:
+  - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://travis-build-stages-shared-storage-test/$TRAVIS_BUILD_NUMBER

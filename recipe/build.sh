@@ -4,9 +4,6 @@ export LDFLAGS="-L${PREFIX}/lib"
 export CFLAGS="-I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
-export PYPY_USESSION_DIR="/tmp/pypy3_usession"
-mkdir -p $PYPY_USESSION_DIR
-
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
