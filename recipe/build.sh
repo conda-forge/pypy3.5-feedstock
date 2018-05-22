@@ -44,8 +44,8 @@ if [ -d $RECIPE_DIR/pypy3_prebuilt ]; then
 
     # Manually copy all the includes.
     cp $RECIPE_DIR/pypy3_prebuilt/*\.h ../../include/
-    cp ../../pypy/module/cpyext/include/* ../../include/
-    cp ../../pypy/module/cpyext/parse/* ../../include/
+    cp ../../pypy/module/cpyext/include/*\.h ../../include/
+    cp ../../pypy/module/cpyext/parse/*\.h ../../include/
 else
     # Build PyPy.
     ${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
