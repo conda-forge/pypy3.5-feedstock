@@ -43,9 +43,9 @@ if [ -d $RECIPE_DIR/pypy3_prebuilt ]; then
     cp $RECIPE_DIR/pypy3_prebuilt/libpypy3-c.dylib ./libpypy3-c.dylib
 
     # Manually copy all the includes.
-    cp $RECIPE_DIR/pypy3_prebuilt/*\.h ../../include/
-    cp ../../pypy/module/cpyext/include/*\.h ../../include/
-    cp ../../pypy/module/cpyext/parse/*\.h ../../include/
+    cp $RECIPE_DIR/pypy3_prebuilt/*\.h $PYPY3_SRC_DIR/include
+    cp $PYPY3_SRC_DIR/pypy/module/cpyext/include/*\.h $PYPY3_SRC_DIR/include
+    cp $PYPY3_SRC_DIR/pypy/module/cpyext/parse/*\.h $PYPY3_SRC_DIR/include
 else
     # Build PyPy.
     ${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
