@@ -65,23 +65,23 @@ jobs:
           - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id || true
           #- (cd $PYPY_USESSION_DIR && tar -czf $PYPY_C_BUILD_TAR_FILE .)
 
-      after_success:
-          #- mkdir -p $PYPY_USESSION_DIR
-          #- tar -xf $PYPY_C_BUILD_TAR_FILE --directory $PYPY_USESSION_DIR
-          # `testing_1` looks for the pypy source & the env's lib in the conda folder.
-          # So we create an empty `pypy3_prebuilt`, which will *fail* the script, but only after create the env and
-          # checking out the code.
-          - mkdir -p ./recipe/pypy3_prebuilt
-          #- conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id || true
+        after_success:
+            #- mkdir -p $PYPY_USESSION_DIR
+            #- tar -xf $PYPY_C_BUILD_TAR_FILE --directory $PYPY_USESSION_DIR
+            # `testing_1` looks for the pypy source & the env's lib in the conda folder.
+            # So we create an empty `pypy3_prebuilt`, which will *fail* the script, but only after create the env and
+            # checking out the code.
+            - mkdir -p ./recipe/pypy3_prebuilt
+            #- conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id || true
 
-          # Make pypy-c & lib.
-          - (cd $PYPY_USESSION_DIR/testing_1 && make -j 2)
+            # Make pypy-c & lib.
+            - (cd $PYPY_USESSION_DIR/testing_1 && make -j 2)
 
-          # Copy the needed prebuilt resources into the recipe.
-          - cp $PYPY_USESSION_DIR/testing_1/libpypy3-c.dylib $PYPY_USESSION_DIR/testing_1/pypy3-c ./recipe/pypy3_prebuilt
-          - cp $PYPY_USESSION_DIR/pypy_decl.h $PYPY_USESSION_DIR/pypy_macros.h $PYPY_USESSION_DIR/pypy_structmember_decl.h ./recipe/pypy3_prebuilt
+            # Copy the needed prebuilt resources into the recipe.
+            - cp $PYPY_USESSION_DIR/testing_1/libpypy3-c.dylib $PYPY_USESSION_DIR/testing_1/pypy3-c ./recipe/pypy3_prebuilt
+            - cp $PYPY_USESSION_DIR/pypy_decl.h $PYPY_USESSION_DIR/pypy_macros.h $PYPY_USESSION_DIR/pypy_structmember_decl.h ./recipe/pypy3_prebuilt
 
-          # And finally, the build should pass.
-          - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id
+            # And finally, the build should pass.
+            - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id
 
-          - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
+            - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
