@@ -34,7 +34,7 @@ TARGET_DIR=${PREFIX}/../target
 ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
 # Build PyPy.
-if [ $(PYPY_PREBUILT) == 1 ]; then
+if [ $PYPY_PREBUILT == 1 ]; then
     cp $SRC_DIR/${PKG_NAME}-c ./${PKG_NAME}-c
     cp $SRC_DIR/libpypy3-c.dylib ./libpypy3-c.dylib
 else
