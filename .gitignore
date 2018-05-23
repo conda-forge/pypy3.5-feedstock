@@ -2,3 +2,5 @@
 
 build_artifacts
 recipe/pypy3_prebuilt
+Miniconda3-latest-MacOSX-x86_64.sh
+pypy3-v6.0.0-c-sources.tgz
