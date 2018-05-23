@@ -1,0 +1,13 @@
+--- pypy3/rpython/tool/udir_org.py	2018-05-22 09:06:39.000000000 +0200
++++ pypy3/rpython/tool/udir.py	2018-05-22 09:16:57.000000000 +0200
+@@ -49,5 +49,8 @@
+                                    prefix = 'usession' + basename,
+                                    keep = PYPY_KEEP)
+ 
+-udir = make_udir(dir      = os.environ.get('PYPY_USESSION_DIR'),
+-                 basename = os.environ.get('PYPY_USESSION_BASENAME'))
++udir = local(os.environ.get('PYPY_USESSION_DIR'))
++
++if not udir.exists():
++    udir.mkdir()
++

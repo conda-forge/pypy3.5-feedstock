@@ -1,0 +1,18 @@
+--- rpython/translator/goal/translate_org.py	2018-05-22 09:32:08.000000000 +0200
++++ rpython/translator/goal/translate.py	2018-05-22 09:54:20.000000000 +0200
+@@ -314,8 +314,14 @@
+             except EnvironmentError:
+                 pass
+ 
++        custom_goal = os.environ.get('PYPY_CUSTOM_GOAL')
++
+         try:
+-            drv.proceed(goals)
++            log('Goals: %r' % (custom_goal if custom_goal else goals))
++            if custom_goal:
++                drv.proceed([custom_goal])
++            else:
++                drv.proceed(goals)
+         finally:
+             drv.timer.pprint()
+     except SystemExit:

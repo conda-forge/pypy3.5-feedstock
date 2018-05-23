@@ -3,6 +3,9 @@ Thank you for pull request.
 Below are a few things we ask you kindly to self-check before getting a review. Remove checks that are not relevant.
 -->
 Checklist
+
+* [ ] **Important** If Re-rendered, make sure to update `.travis` to multiple stages to avoid timeouts.
+
 * [ ] Used a fork of the feedstock to propose changes
 * [ ] Bumped the build number (if the version is unchanged)
 * [ ] Reset the build number to `0` (if the version changed)

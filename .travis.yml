@@ -7,13 +7,16 @@ os: osx
 osx_image: xcode6.4
 
 env:
-  matrix:
-    - CONFIG=osx_
-
   global:
     # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
     - secure: "a5K0kmRaXI55IBHFhNe+Q07BzkWJwqe7dy8COb5T0LFnVGMLPP7s+YXb+szVv+Vsz8qr17GpjucGK/AiPxuWCfCcY0fiCGSyNx8XTrt5Rpc0xNFefY6Q2DC9k32xCbdYQkngg0LBlFdS8sckf+730F/u9ySea/0bHNM0nWfUQXq4enAjX+ayS6dhv6Tr4a3buy37M9Ha8FCY8enB/wubdVPJVn3JxjNcZxr6MtEyzPOPMOZ70LaNzX2yWUz44xKyXqan/i6bmh4j9XlerszJJ9Gd46RKTquikJgpDi4QNrpMT81Le2GTAhaATCC5A9sWXvh5kHDXohCNfv9vLVcrpfLOpqoMWyRrhTMWCGN5f6l+xP5RjQV/ekbvlKQeM5EDo5jawffcHA9eL2ISqBZWLbbEUMp9q7Ks0DMTiWBgiAXNBLBo55skEF3Utmw5PysAjySH5x8/EUvzFwbr19SJi3X40Nfw3ES8kn8sBqRCgH1prMAnoYO3/+EVO1MN8hXwgnTGZ8k0Hj8q4VPCDXGuGtW8yTORsQ05NgyqXKl8pYwLrN1wrHW4clKa40kQ92kL3yRI4w0+nkThtyBDXVx3SccMvp1V+YCwbOKqPBxI9OT7qwQ5lDOTtEt5I850tgEhqsu63MbmwP3WXhRzVPQR6pyGEf/S4/ZakGCCFx3AmQA="
 
+    - PYPY_USESSION_DIR=/tmp/pypy3.5-usession
+    - PYPY_C_BUILD_TAR_FILE=~/$TRAVIS_COMMIT/pypy3-v6.0.0-c-sources.tgz
+    - PYPY_C_BUILD_TAG_FILE_URL=https://github.com/conda-forge/pypy3.5-feedstock/releases/download/v6.0.0-0/pypy3-v6.0.0-c-sources.tgz
+    - CONFIG=osx_
+    # Use the same miniconda prefix as used to generate the source files.
+    - CONDA_FOLDER=/tmp/miniconda
 
 before_install:
     # Fast finish the PR.
@@ -30,7 +33,6 @@ before_install:
       ~/uninstall_homebrew -fq
       rm ~/uninstall_homebrew
 
-
 install:
     # Install Miniconda.
     - |
@@ -39,13 +41,13 @@ install:
       MINICONDA_URL="https://repo.continuum.io/miniconda"
       MINICONDA_FILE="Miniconda3-latest-MacOSX-x86_64.sh"
       curl -L -O "${MINICONDA_URL}/${MINICONDA_FILE}"
-      bash $MINICONDA_FILE -b
+      bash $MINICONDA_FILE -b -p $CONDA_FOLDER
 
     # Configure conda.
     - |
       echo ""
       echo "Configuring conda."
-      source /Users/travis/miniconda3/bin/activate root
+      source $CONDA_FOLDER/bin/activate root
       conda config --remove channels defaults
       conda config --add channels defaults
       conda config --add channels conda-forge
@@ -54,6 +56,24 @@ install:
       source run_conda_forge_build_setup
 
 script:
-  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml
+  # `testing_1` looks for the pypy source & the env's lib in the conda folder.
+  # So we create an empty `pypy3_prebuilt`, which will *fail* the script, but only after create the env and
+  # checking out the code.
+  - mkdir -p ./recipe/pypy3_prebuilt
+  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id || true
 
-  - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml
+  - mkdir -p $PYPY_USESSION_DIR
+  - curl -L $PYPY_C_BUILD_TAG_FILE_URL -o $PYPY_C_BUILD_TAR_FILE
+  - tar -xf $PYPY_C_BUILD_TAR_FILE --directory $PYPY_USESSION_DIR
+
+  # Make pypy-c & lib.
+  - (cd $PYPY_USESSION_DIR/testing_1 && make -j 2)
+
+  # Copy the needed prebuilt resources into the recipe.
+  - cp $PYPY_USESSION_DIR/testing_1/libpypy3-c.dylib $PYPY_USESSION_DIR/testing_1/pypy3-c ./recipe/pypy3_prebuilt
+  - cp $PYPY_USESSION_DIR/pypy_decl.h $PYPY_USESSION_DIR/pypy_macros.h $PYPY_USESSION_DIR/pypy_structmember_decl.h ./recipe/pypy3_prebuilt
+
+  # And finally, the build should pass.
+  - conda build ./recipe -m ./.ci_support/${CONFIG}.yaml --no-build-id
+
+  - upload_or_check_non_existence ./recipe conda-forge --channel=main -m ./.ci_support/${CONFIG}.yaml --no-build-id
