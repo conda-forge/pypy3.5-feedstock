@@ -7,9 +7,6 @@ os: osx
 osx_image: xcode6.4
 
 env:
-  matrix:
-    - CONFIG=osx_
-
   global:
     # The BINSTAR_TOKEN secure variable. This is defined canonically in conda-forge.yml.
     - secure: "a5K0kmRaXI55IBHFhNe+Q07BzkWJwqe7dy8COb5T0LFnVGMLPP7s+YXb+szVv+Vsz8qr17GpjucGK/AiPxuWCfCcY0fiCGSyNx8XTrt5Rpc0xNFefY6Q2DC9k32xCbdYQkngg0LBlFdS8sckf+730F/u9ySea/0bHNM0nWfUQXq4enAjX+ayS6dhv6Tr4a3buy37M9Ha8FCY8enB/wubdVPJVn3JxjNcZxr6MtEyzPOPMOZ70LaNzX2yWUz44xKyXqan/i6bmh4j9XlerszJJ9Gd46RKTquikJgpDi4QNrpMT81Le2GTAhaATCC5A9sWXvh5kHDXohCNfv9vLVcrpfLOpqoMWyRrhTMWCGN5f6l+xP5RjQV/ekbvlKQeM5EDo5jawffcHA9eL2ISqBZWLbbEUMp9q7Ks0DMTiWBgiAXNBLBo55skEF3Utmw5PysAjySH5x8/EUvzFwbr19SJi3X40Nfw3ES8kn8sBqRCgH1prMAnoYO3/+EVO1MN8hXwgnTGZ8k0Hj8q4VPCDXGuGtW8yTORsQ05NgyqXKl8pYwLrN1wrHW4clKa40kQ92kL3yRI4w0+nkThtyBDXVx3SccMvp1V+YCwbOKqPBxI9OT7qwQ5lDOTtEt5I850tgEhqsu63MbmwP3WXhRzVPQR6pyGEf/S4/ZakGCCFx3AmQA="
@@ -17,6 +14,7 @@ env:
     - PYPY_USESSION_DIR=~/$TRAVIS_BUILD_NUMBER/pypy3.5-usession
     - PYPY_C_BUILD_TAR_FILE=~/$TRAVIS_BUILD_NUMBER/pypy35csource.tgz
     - PYPY_BUILD_ALIAS=pypybuild$TRAVIS_BUILD_NUMBER
+    - CONFIG=osx_
 
 before_install:
     # Fast finish the PR.
