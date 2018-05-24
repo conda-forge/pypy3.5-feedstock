@@ -14,8 +14,7 @@ Summary: PyPy is a Python interpreter and just-in-time compiler.
 Current build status
 ====================
 
-[![Linux](https://img.shields.io/circleci/project/github/conda-forge/pypy3.5-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/pypy3.5-feedstock)
-[![OSX](https://img.shields.io/travis/conda-forge/pypy3.5-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/pypy3.5-feedstock)
+[![Linux,OSX](https://img.shields.io/circleci/project/github/conda-forge/pypy3.5-feedstock/master.svg?label=Linux,OSX)](https://circleci.com/gh/conda-forge/pypy3.5-feedstock)
 ![Windows disabled](https://img.shields.io/badge/Windows-disabled-lightgrey.svg)
 
 Current release info

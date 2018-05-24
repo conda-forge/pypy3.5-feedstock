@@ -4,18 +4,11 @@ export LDFLAGS="-L${PREFIX}/lib"
 export CFLAGS="-I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
-PYPY3_SRC_DIR=$SRC_DIR
+PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
-    # We must use pypy2 to build (which is faster), otherwise the build might timeout.
-    curl -L https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.9.0-osx64.tar.bz2 -O
-    echo "94de50ed80c7f6392ed356c03fd54cdc84858df43ad21e9e971d1b6da0f6b867 *pypy2-v5.9.0-osx64.tar.bz2" | shasum -a 256 -c -
-
-    tar -xvf pypy2-v5.9.0-osx64.tar.bz2
-
     export CC=clang
-    export PYTHON=$SRC_DIR/pypy2-v5.9.0-osx64/bin/pypy
-    export N_JOBS=2
+    export PYTHON=$SRC_DIR/pypy2-osx/bin/pypy
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
     # This is only relevant during the build, so we will put the original file back at the end.
@@ -28,7 +21,6 @@ fi
 if [ $(uname) == Linux ]; then
    export CC=gcc
    export PYTHON=${PREFIX}/bin/python
-   export N_JOBS=4
 fi
 
 GOAL_DIR=$PYPY3_SRC_DIR/pypy/goal
@@ -41,7 +33,7 @@ ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
 # Build PyPy.
 cd $GOAL_DIR
-${PYTHON} ../../rpython/bin/rpython --make-jobs $N_JOBS --shared --cc=$CC -Ojit targetpypystandalone.py
+${PYTHON} ../../rpython/bin/rpython --make-jobs 4 --shared --cc=$CC -Ojit targetpypystandalone.py
 
 if [ $(uname) == Darwin ]; then
     # Temporally set the @rpath of the generated PyPy binary to ${PREFIX}.
