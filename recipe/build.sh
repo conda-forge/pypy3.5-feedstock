@@ -4,6 +4,9 @@ export LDFLAGS="-L${PREFIX}/lib"
 export CFLAGS="-I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
+# PyPy translation looks for this.
+export PYPY_LOCALBASE="$PREFIX"
+
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
@@ -21,6 +24,9 @@ fi
 if [ $(uname) == Linux ]; then
    export CC=gcc
    export PYTHON=${PREFIX}/bin/python
+
+   # Prevent linking to libncurses, forces libncursesw.
+   rm -f ${PREFIX}/lib/libncurses.*
 fi
 
 GOAL_DIR=$PYPY3_SRC_DIR/pypy/goal
@@ -70,6 +76,10 @@ fi
 
 
 if [ $(uname) == Linux ]; then
+    # Show links.
+    ldd $PREFIX/bin/pypy3
+    ldd $PREFIX/bin/libpypy3-c.so
+
     # Move the so to lib folder.
     mv $PREFIX/bin/libpypy3-c.so $PREFIX/lib/libpypy3-c.so
 
