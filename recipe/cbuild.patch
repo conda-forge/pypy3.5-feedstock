@@ -1,0 +1,26 @@
+--- pypy3/rpython/translator/tool/cbuild.py	2018-06-19 15:46:30.000000000 +0200
++++ pypy3/rpython/translator/tool/cbuild.py	2018-06-19 18:41:48.000000000 +0200
+@@ -19,10 +19,10 @@
+     def __init__(self,
+                  pre_include_bits        = [],
+                  includes                = [],
+-                 include_dirs            = [],
++                 include_dirs            = [os.path.join(os.environ['PYPY_LOCALBASE'], 'include')],
+                  post_include_bits       = [],
+                  libraries               = [],
+-                 library_dirs            = [],
++                 library_dirs            = [os.path.join(os.environ['PYPY_LOCALBASE'], 'lib')],
+                  separate_module_sources = [],
+                  separate_module_files   = [],
+                  compile_extra           = [],
+@@ -88,6 +88,10 @@
+ 
+         platform: an object that can identify the platform
+         """
++        l = locals()
++        l.pop('self')
++        print(l)
++        print()
+         for name in self._ATTRIBUTES:
+             value = locals()[name]
+             assert isinstance(value, (list, tuple))

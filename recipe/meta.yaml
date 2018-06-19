@@ -14,6 +14,7 @@ source:
       - tklib_build.patch
       - minimal_curses.patch
       - rffi_platform.patch
+      - cbuild.patch
 
   - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.9.0-osx64.tar.bz2  # [osx]
     fn: pypy2-v5.9.0-osx64.tar.bz2  # [osx]

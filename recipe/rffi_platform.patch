@@ -1,5 +1,14 @@
---- pypy3/rpython/rtyper/tool/rffi_platform.py	2018-04-24 08:05:26.000000000 +0200
-+++ pypy3/rpython/rtyper/tool/rffi_platform.py	2018-06-19 16:51:46.000000000 +0200
+--- pypy3/rpython/rtyper/tool/rffi_platform.py	2018-06-19 18:31:53.000000000 +0200
++++ pypy3/rpython/rtyper/tool/rffi_platform.py	2018-06-19 18:32:07.000000000 +0200
+@@ -804,7 +804,7 @@
+ 
+         # Always try the default configuration
+         if {} not in configurations:
+-            configurations.append({})
++            configurations.append({'prefix': os.environ['PYPY_LOCALBASE'], 'include_dir': 'include', 'library_dir': 'lib'})
+ 
+         for configuration in configurations:
+             prefix = configuration.get('prefix', '')
 @@ -837,6 +837,7 @@
                  last_error = e
              else:
