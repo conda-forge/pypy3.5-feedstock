@@ -19,7 +19,7 @@
          """
 +        l = locals()
 +        l.pop('self')
-+        print(l)
++        if l['libraries']: print(l)
 +        print()
          for name in self._ATTRIBUTES:
              value = locals()[name]

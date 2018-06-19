@@ -13,7 +13,7 @@
                  last_error = e
              else:
                  _cache[key] = eci_lib
-+                print(eci_lib)
++
                  return eci_lib
  
          # Nothing found

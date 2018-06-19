@@ -7,6 +7,10 @@ export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 # PyPy translation looks for this.
 export PYPY_LOCALBASE="$PREFIX"
 
+export LIBRARY_PATH=${PREFIX}/lib
+export C_INCLUDE_PATH=${PREFIX}/include
+export CPATH=${PREFIX}/include
+
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
