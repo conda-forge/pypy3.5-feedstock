@@ -1,0 +1,10 @@
+--- pypy3/rpython/rtyper/tool/rffi_platform.py	2018-04-24 08:05:26.000000000 +0200
++++ pypy3/rpython/rtyper/tool/rffi_platform.py	2018-06-19 16:51:46.000000000 +0200
+@@ -837,6 +837,7 @@
+                 last_error = e
+             else:
+                 _cache[key] = eci_lib
++                print(eci_lib)
+                 return eci_lib
+ 
+         # Nothing found
