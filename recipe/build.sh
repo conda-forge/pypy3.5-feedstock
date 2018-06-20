@@ -21,6 +21,16 @@ fi
 if [ $(uname) == Linux ]; then
    export CC=gcc
    export PYTHON=${PREFIX}/bin/python
+
+   # Prevent linking to libncurses, forces libncursesw.
+   rm -f ${PREFIX}/lib/libncurses.*
+
+    # PyPy translation looks for this.
+    export PYPY_LOCALBASE="$PREFIX"
+
+    export LIBRARY_PATH=${PREFIX}/lib
+    export C_INCLUDE_PATH=${PREFIX}/include
+    export CPATH=${PREFIX}/include
 fi
 
 GOAL_DIR=$PYPY3_SRC_DIR/pypy/goal
@@ -70,6 +80,10 @@ fi
 
 
 if [ $(uname) == Linux ]; then
+    # Show links.
+    ldd $PREFIX/bin/pypy3
+    ldd $PREFIX/bin/libpypy3-c.so
+
     # Move the so to lib folder.
     mv $PREFIX/bin/libpypy3-c.so $PREFIX/lib/libpypy3-c.so
 

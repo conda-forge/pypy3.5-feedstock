@@ -11,6 +11,8 @@ source:
     sha256: ed8005202b46d6fc6831df1d13a4613bc40084bfa42f275068edadf8954034a3
     folder: pypy3
     patches:
+      - fficurses.patch
+      - minimal_curses.patch
       - tklib_build.patch
 
   - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.9.0-osx64.tar.bz2  # [osx]
@@ -19,7 +21,7 @@ source:
     folder: pypy2-osx  # [osx]
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win]
   skip_compile_pyc:
     - lib*
