@@ -11,7 +11,8 @@ source:
     sha256: ed8005202b46d6fc6831df1d13a4613bc40084bfa42f275068edadf8954034a3
     folder: pypy3
     patches:
-      - fficurses.patch
+      - fficurses_linux.patch  # [linux]
+      - fficurses_osx.patch  # [osx]
       - minimal_curses.patch
       - tklib_build.patch
 
