@@ -13,14 +13,3 @@
                   separate_module_sources = [],
                   separate_module_files   = [],
                   compile_extra           = [],
-@@ -88,6 +88,10 @@
- 
-         platform: an object that can identify the platform
-         """
-+        l = locals()
-+        l.pop('self')
-+        if l['libraries']: print(l)
-+        print()
-         for name in self._ATTRIBUTES:
-             value = locals()[name]
-             assert isinstance(value, (list, tuple))
