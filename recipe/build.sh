@@ -4,13 +4,6 @@ export LDFLAGS="-L${PREFIX}/lib"
 export CFLAGS="-I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
-# PyPy translation looks for this.
-export PYPY_LOCALBASE="$PREFIX"
-
-export LIBRARY_PATH=${PREFIX}/lib
-export C_INCLUDE_PATH=${PREFIX}/include
-export CPATH=${PREFIX}/include
-
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
@@ -31,6 +24,13 @@ if [ $(uname) == Linux ]; then
 
    # Prevent linking to libncurses, forces libncursesw.
    rm -f ${PREFIX}/lib/libncurses.*
+
+    # PyPy translation looks for this.
+    export PYPY_LOCALBASE="$PREFIX"
+
+    export LIBRARY_PATH=${PREFIX}/lib
+    export C_INCLUDE_PATH=${PREFIX}/include
+    export CPATH=${PREFIX}/include
 fi
 
 GOAL_DIR=$PYPY3_SRC_DIR/pypy/goal
