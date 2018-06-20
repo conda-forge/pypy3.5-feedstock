@@ -11,10 +11,8 @@ source:
     sha256: ed8005202b46d6fc6831df1d13a4613bc40084bfa42f275068edadf8954034a3
     folder: pypy3
     patches:
-      - cbuild.patch  # [linux]
       - fficurses.patch
       - minimal_curses.patch
-      - rffi_platform.patch  # [linux]
       - tklib_build.patch
 
   - url: https://bitbucket.org/pypy/pypy/downloads/pypy2-v5.9.0-osx64.tar.bz2  # [osx]
