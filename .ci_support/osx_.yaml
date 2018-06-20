@@ -1,15 +1,13 @@
 MACOSX_DEPLOYMENT_TARGET:
 - '10.9'
 bzip2:
-- '1'
+- '1.0'
 c_compiler:
 - toolchain_c
 expat:
 - '2.2'
 libffi:
 - '3.2'
-libunwind:
-- '1.2'
 macos_machine:
 - x86_64-apple-darwin13.4.0
 macos_min_version:
@@ -18,12 +16,10 @@ openssl:
 - 1.0.2
 pin_run_as_build:
   bzip2:
-    max_pin: x
+    max_pin: x.x
   expat:
     max_pin: x.x
   libffi:
-    max_pin: x.x
-  libunwind:
     max_pin: x.x
   openssl:
     max_pin: x.x.x
