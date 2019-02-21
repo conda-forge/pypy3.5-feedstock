@@ -1,14 +1,14 @@
 {% set name = "pypy3.5" %}
-{% set version = "6.0.0" %}
+{% set version = "7.0.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  - url: https://bitbucket.org/pypy/pypy/downloads/pypy3-v{{ version }}-src.tar.bz2
-    fn: pypy3-v{{ version }}-src.tar.bz2
-    sha256: ed8005202b46d6fc6831df1d13a4613bc40084bfa42f275068edadf8954034a3
+  - url: https://bitbucket.org/pypy/pypy/downloads/pypy3.5-v{{ version }}-src.tar.bz2
+    fn: pypy3.5-v{{ version }}-src.tar.bz2
+    sha256: b2ddb0f45cb4e0384fb498ef7fcca2ac96c730b9000affcf8d730169397f017f
     folder: pypy3
     patches:
       - fficurses.patch
@@ -23,7 +23,7 @@ source:
     folder: pypy2-osx  # [osx]
 
 build:
-  number: 2
+  number: 0
   skip: True  # [win]
   skip_compile_pyc:
     - lib*
