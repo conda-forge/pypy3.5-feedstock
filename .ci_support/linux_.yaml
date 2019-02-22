@@ -1,7 +1,13 @@
 bzip2:
-- '1.0'
+- '1'
 c_compiler:
-- toolchain_c
+- gcc
+channel_sources:
+- conda-forge,defaults
+channel_targets:
+- conda-forge main
+docker_image:
+- condaforge/linux-anvil-comp7
 expat:
 - '2.2'
 libffi:
@@ -10,7 +16,7 @@ openssl:
 - 1.0.2
 pin_run_as_build:
   bzip2:
-    max_pin: x.x
+    max_pin: x
   expat:
     max_pin: x.x
   libffi:
