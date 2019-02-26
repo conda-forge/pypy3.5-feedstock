@@ -12,8 +12,8 @@ if [ $(uname) == Darwin ]; then
     export PYTHON=$SRC_DIR/pypy2-osx/bin/pypy
 
     echo "Debug -lctr error"
-    ls -la /Developer/SDKs
-    find /Developer/SDKs -name crt1\*
+    ls -la /Library/Developer/CommandLineTools/SDKs
+    find /Library/Developer/CommandLineTools/SDKs -name crt1\*
     echo "End Debug"
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
