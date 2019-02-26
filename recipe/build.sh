@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export LDFLAGS="-L${PREFIX}/lib"
-export CFLAGS="-I${PREFIX}/include"
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib"
+export CFLAGS="${CFLAGS} -I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
