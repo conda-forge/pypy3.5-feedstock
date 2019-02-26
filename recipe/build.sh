@@ -7,8 +7,14 @@ export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
+    export CFLAGS="${CFLAGS} ${CPPFLAGS}"
     export CC=$CLANG
     export PYTHON=$SRC_DIR/pypy2-osx/bin/pypy
+
+    echo "Debug -lctr error"
+    ls -la /Developer/SDKs
+    find /Developer/SDKs -name crt1\*
+    echo "End Debug"
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
     # This is only relevant during the build, so we will put the original file back at the end.
