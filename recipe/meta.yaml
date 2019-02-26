@@ -32,7 +32,7 @@ requirements:
     - python >=2.7,<3
   host:
     - python >=2.7,<3
-    - libunwind  # [osx]
+    - libunwind >=4.0  # [osx]
     - pkg-config
     - pycparser
     - openssl
@@ -47,7 +47,7 @@ requirements:
     - xz
     - tk
   run:
-    - libunwind  # [osx]
+    - libunwind >=4.0  # [osx]
     - openssl
     - libffi
     - sqlite
