@@ -10,11 +10,8 @@ if [ $(uname) == Darwin ]; then
     export CFLAGS="${CFLAGS} ${CPPFLAGS}"
     export CC=$CLANG
     export PYTHON=$SRC_DIR/pypy2-osx/bin/pypy
-
-    echo "Debug -lctr error"
-    ls -la /Library/Developer/CommandLineTools/SDKs
-    find /Library/Developer/CommandLineTools/SDKs -name crt1\*
-    echo "End Debug"
+    # For crt1.o
+    export LDFLAGS="${LDFLAGS} -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib/"
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
     # This is only relevant during the build, so we will put the original file back at the end.
