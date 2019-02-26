@@ -20,7 +20,7 @@ if [ $(uname) == Darwin ]; then
 fi
 
 if [ $(uname) == Linux ]; then
-   export CC=gcc
+   export CC=$GCC
    export PYTHON=${PREFIX}/bin/python
 
    # Prevent linking to libncurses, forces libncursesw.
