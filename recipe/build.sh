@@ -7,8 +7,7 @@ export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 PYPY3_SRC_DIR=$SRC_DIR/pypy3
 
 if [ $(uname) == Darwin ]; then
-    export CFLAGS="${CFLAGS} ${CPPFLAGS}"
-    export CC=clang
+    export CC=$CLANG
     export PYTHON=$SRC_DIR/pypy2-osx/bin/pypy
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
