@@ -46,6 +46,7 @@ requirements:
     - gdbm
     - xz
     - tk
+    - bzip2
   run:
     - libunwind >=4.0  # [osx]
     - openssl
@@ -58,6 +59,7 @@ requirements:
     - gdbm
     - xz
     - expat
+    - bzip2
 
 test:
   commands:
