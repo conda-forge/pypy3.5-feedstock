@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib"
+export LDFLAGS="${LDFLAGS} -L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib"
 export CFLAGS="${CFLAGS} -I${PREFIX}/include"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig"
 
@@ -12,10 +12,10 @@ if [ $(uname) == Darwin ]; then
 
     # libffi doesn't look in the correct location. We modify a copy of it since it's a hard link to conda's file.
     # This is only relevant during the build, so we will put the original file back at the end.
-    mv ${PREFIX}/lib/libffi.6.dylib ${PREFIX}/lib/libffi.6.dylib.bak
-    cp ${PREFIX}/lib/libffi.6.dylib.bak ${PREFIX}/lib/libffi.6.dylib
+#    mv ${PREFIX}/lib/libffi.6.dylib ${PREFIX}/lib/libffi.6.dylib.bak
+#    cp ${PREFIX}/lib/libffi.6.dylib.bak ${PREFIX}/lib/libffi.6.dylib
 
-    install_name_tool -id ${PREFIX}/lib/libffi.6.dylib ${PREFIX}/lib/libffi.6.dylib
+#    install_name_tool -id ${PREFIX}/lib/libffi.6.dylib ${PREFIX}/lib/libffi.6.dylib
 fi
 
 if [ $(uname) == Linux ]; then
@@ -43,12 +43,12 @@ ARCHIVE_NAME="${PKG_NAME}-${PKG_VERSION}"
 
 # Build PyPy.
 cd $GOAL_DIR
-${PYTHON} ../../rpython/bin/rpython --make-jobs 4 --shared --cc=$CC -Ojit targetpypystandalone.py
+${PYTHON} ../../rpython/bin/rpython --make-jobs 4 --shared -Ojit targetpypystandalone.py
 
 if [ $(uname) == Darwin ]; then
     # Temporally set the @rpath of the generated PyPy binary to ${PREFIX}.
     cp ./${PKG_NAME}-c ./${PKG_NAME}-c.bak
-    install_name_tool -add_rpath "${PREFIX}/lib" ./${PKG_NAME}-c
+    ${INSTALL_NAME_TOOL} -add_rpath "${PREFIX}/lib" ./${PKG_NAME}-c
 fi
 
 # Build cffi imports using the generated PyPy.
@@ -71,11 +71,11 @@ if [ $(uname) == Darwin ]; then
     mv $PREFIX/bin/libpypy3-c.dylib $PREFIX/lib/libpypy3-c.dylib
 
     # Change @rpath to be relative to match conda's structure.
-    install_name_tool -rpath "${PREFIX}/lib" "@loader_path/../lib" $PREFIX/bin/pypy3
+    ${INSTALL_NAME_TOOL} -rpath "${PREFIX}/lib" "@loader_path/../lib" $PREFIX/bin/pypy3
     rm $GOAL_DIR/${PKG_NAME}-c.bak
 
     # The original libffi, works, so there is no need to ship our patched version.
-    mv ${PREFIX}/lib/libffi.6.dylib.bak ${PREFIX}/lib/libffi.6.dylib
+#    mv ${PREFIX}/lib/libffi.6.dylib.bak ${PREFIX}/lib/libffi.6.dylib
 fi
 
 
