@@ -13,7 +13,8 @@ fi
 
 if [ $(uname) == Linux ]; then
    # Some ffi deps are expecting 'cc', so we give it to them.
-   ln -s $CC ${PREFIX}/bin/cc
+   export FAKE_CC_LINK=${PREFIX}/bin/cc
+   ln -s $CC $FAKE_CC_LINK
    export PATH="${PATH}/bin:${PATH}"
 
    export CC=$GCC
@@ -83,4 +84,7 @@ if [ $(uname) == Linux ]; then
 
     # Conda tries to `patchself` this file, which fails.
     rm -f $PREFIX/bin/pypy3.debug
+
+    # Conda will complain if a symlink exists.
+    rm -f $FAKE_CC_LINK
 fi
