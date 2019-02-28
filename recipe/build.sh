@@ -12,6 +12,10 @@ if [ $(uname) == Darwin ]; then
 fi
 
 if [ $(uname) == Linux ]; then
+   # Some ffi deps are expecting 'cc', so we give it to them.
+   ln -s $CC ${PREFIX}/bin/cc
+   export PATH="${PATH}/bin:${PATH}"
+
    export CC=$GCC
    export PYTHON=${PREFIX}/bin/python
 
