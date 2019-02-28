@@ -48,6 +48,7 @@ requirements:
     - xz
     - tk
     - bzip2
+    - xorg-libx11  # [linux]
   run:
     - libunwind >=4.0  # [osx]
     - openssl
